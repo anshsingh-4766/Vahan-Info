@@ -16,8 +16,8 @@ A simple and user-friendly web application that allows users to fetch vehicle de
 
 🛠️ Tech Stack
 
-HTML5 – Structure of the application
+HTML – Structure of the application
 
-CSS3 – Styling and layout
+CSS – Styling and layout
 
-JavaScript (Vanilla JS) – Form handling and logic
+JavaScript – Form handling and logic
