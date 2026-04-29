@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Secure demo portal for login, registration, and saving vehicle, RC, and license details.">
+  <title>Vahan Info | Secure Vehicle Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">V</span>
+        <div>
+          <p class="brand-kicker">Secure records portal</p>
+          <h1>Vahan Info</h1>
+        </div>
+      </div>
+      <div class="topbar-pill" id="sessionStatus">Guest mode</div>
+    </header>
+
+    <main class="hero auth-layout">
+      <section class="hero-copy">
+        <span class="eyebrow">Unified login and records</span>
+        <h2>Register once, then store your RC, license, and vehicle information in one place.</h2>
+        <p>
+          Create a secure demo account, sign in, and manage the details you want to keep handy.
+          The data is stored locally in your browser so you can view it again later.
+        </p>
+
+        <div class="stats">
+          <article>
+            <strong>Login</strong>
+            <span>Access your saved profile quickly</span>
+          </article>
+          <article>
+            <strong>Register</strong>
+            <span>Create a new account and profile</span>
+          </article>
+          <article>
+            <strong>Store</strong>
+            <span>Save RC, license, and vehicle details</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="search-panel auth-card" aria-label="Authentication panel">
+        <div class="auth-tabs">
+          <button type="button" class="auth-tab is-active" data-auth-tab="login">Login</button>
+          <button type="button" class="auth-tab" data-auth-tab="register">Register</button>
+        </div>
+
+        <form id="loginForm" class="auth-form auth-form--active">
+          <label class="field">
+            <span>Email</span>
+            <input type="email" id="loginEmail" placeholder="name@example.com" required>
+          </label>
+
+          <label class="field">
+            <span>Password</span>
+            <input type="password" id="loginPassword" placeholder="Enter your password" required>
+          </label>
+
+          <button type="submit">Sign In</button>
+        </form>
+
+        <form id="registerForm" class="auth-form">
+          <label class="field">
+            <span>Full name</span>
+            <input type="text" id="registerName" placeholder="Your full name" required>
+          </label>
+
+          <label class="field">
+            <span>Email</span>
+            <input type="email" id="registerEmail" placeholder="name@example.com" required>
+          </label>
+
+          <label class="field">
+            <span>Password</span>
+            <input type="password" id="registerPassword" placeholder="Create a password" minlength="6" required>
+          </label>
+
+          <div class="auth-grid">
+            <label class="field">
+              <span>Phone</span>
+              <input type="tel" id="registerPhone" placeholder="10 digit number" required>
+            </label>
+            <label class="field">
+              <span>City</span>
+              <input type="text" id="registerCity" placeholder="Your city" required>
+            </label>
+          </div>
+
+          <button type="submit">Create Account</button>
+        </form>
+      </section>
+    </main>
+
+    <section id="dashboard" class="dashboard" hidden>
+      <div class="dashboard-hero">
+        <div>
+          <span class="eyebrow">User dashboard</span>
+          <h3 id="dashboardTitle">Profile overview</h3>
+          <p id="dashboardSubtitle">Your saved records appear below.</p>
+        </div>
+        <button type="button" id="logoutButton" class="secondary-button">Logout</button>
+      </div>
+
+      <div class="dashboard-grid">
+        <article class="info-card info-card--accent">
+          <p class="info-card-label">Account</p>
+          <strong id="accountName">-</strong>
+          <span id="accountEmail">-</span>
+        </article>
+        <article class="info-card">
+          <p class="info-card-label">Contact</p>
+          <strong id="accountPhone">-</strong>
+          <span id="accountCity">-</span>
+        </article>
+        <article class="info-card">
+          <p class="info-card-label">Status</p>
+          <strong id="recordCount">0 records</strong>
+          <span>RC, license, and vehicle info</span>
+        </article>
+      </div>
+
+      <div class="dashboard-panels">
+        <section class="search-panel" aria-label="Saved details form">
+          <div class="panel-header">
+            <p>Save details</p>
+            <span>Local browser storage</span>
+          </div>
+
+          <form id="detailsForm" class="details-form">
+            <div class="auth-grid">
+              <label class="field">
+                <span>RC number</span>
+                <input type="text" id="rcNumber" placeholder="RC number" required>
+              </label>
+              <label class="field">
+                <span>License number</span>
+                <input type="text" id="licenseNumber" placeholder="License number" required>
+              </label>
+            </div>
+
+            <div class="auth-grid">
+              <label class="field">
+                <span>Vehicle number</span>
+                <input type="text" id="vehicleNumber" placeholder="Vehicle number" required>
+              </label>
+              <label class="field">
+                <span>Vehicle model</span>
+                <input type="text" id="vehicleModel" placeholder="Vehicle model" required>
+              </label>
+            </div>
+
+            <div class="auth-grid">
+              <label class="field">
+                <span>Fuel type</span>
+                <input type="text" id="vehicleFuel" placeholder="Petrol / Diesel / EV" required>
+              </label>
+              <label class="field">
+                <span>Registration date</span>
+                <input type="date" id="vehicleRegistrationDate" required>
+              </label>
+            </div>
+
+            <button type="submit">Save details</button>
+          </form>
+        </section>
+
+        <section class="result-area records-panel" aria-live="polite">
+          <div class="panel-header">
+            <p>Saved records</p>
+            <span>Everything in one place</span>
+          </div>
+          <div id="result">
+            <div class="empty-state">
+              <div class="empty-icon">•</div>
+              <h3>No records yet</h3>
+              <p>Add your RC, license, and vehicle details to populate this panel.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

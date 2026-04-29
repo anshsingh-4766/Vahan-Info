@@ -1,0 +1,5 @@
+node_modules/
+vahan-records.db
+vahan-records.db-shm
+vahan-records.db-wal
+npm-debug.log*
