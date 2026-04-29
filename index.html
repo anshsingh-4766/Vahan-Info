@@ -3,22 +3,81 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vahan Info</title>
+  <meta name="description" content="Professional vehicle information portal with a polished, modern search experience.">
+  <title>Vahan Info | Vehicle Details Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-  <header class="hero">
-    <h1>Vahan Information Portal</h1>
-    <p>Enter your vehicle number to get details</p>
-    <form id="vahanForm">
-      <input type="text" id="vehicleNumber" placeholder="Enter Vehicle Number (e.g. GJ01AB1234)" required>
-      <button type="submit">Get Info</button>
-    </form>
-  </header>
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">V</span>
+        <div>
+          <p class="brand-kicker">Vehicle intelligence</p>
+          <h1>Vahan Info</h1>
+        </div>
+      </div>
+      <div class="topbar-pill">Live demo portal</div>
+    </header>
 
-  <section id="result" class="section">
-    <!-- Vehicle info will appear here -->
-  </section>
+    <main class="hero">
+      <section class="hero-copy">
+        <span class="eyebrow">Professional vehicle lookup</span>
+        <h2>Search a vehicle and get a clean, premium summary in seconds.</h2>
+        <p>
+          A refined interface for quickly checking vehicle details with a modern, trustworthy presentation.
+        </p>
+
+        <div class="stats">
+          <article>
+            <strong>Fast</strong>
+            <span>Immediate response experience</span>
+          </article>
+          <article>
+            <strong>Clear</strong>
+            <span>Readable card-based details</span>
+          </article>
+          <article>
+            <strong>Polished</strong>
+            <span>Professional visual hierarchy</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="search-panel" aria-label="Vehicle search form">
+        <div class="panel-header">
+          <p>Vehicle lookup</p>
+          <span>Official format</span>
+        </div>
+
+        <form id="vahanForm" class="search-form">
+          <label class="sr-only" for="vehicleNumber">Vehicle number</label>
+          <input
+            type="text"
+            id="vehicleNumber"
+            placeholder="Enter vehicle number, e.g. GJ01AB1234"
+            autocomplete="off"
+            spellcheck="false"
+            required
+          >
+          <button type="submit">Search Vehicle</button>
+        </form>
+
+        <p class="helper-text">Tip: Use the exact registration number for the best result.</p>
+      </section>
+    </main>
+
+    <section id="result" class="result-area" aria-live="polite">
+      <div class="empty-state">
+        <div class="empty-icon">•</div>
+        <h3>Results will appear here</h3>
+        <p>Enter a vehicle number above to see a professional details card.</p>
+      </div>
+    </section>
+  </div>
 
   <script src="script.js"></script>
 </body>
