@@ -12,182 +12,237 @@
 </head>
 <body>
   <div class="page-shell">
-    <header class="topbar">
-      <div class="brand">
-        <span class="brand-mark">V</span>
-        <div>
-          <p class="brand-kicker">Secure records portal</p>
-          <h1>Vahan Info</h1>
+    <header class="topbar" role="banner">
+      <div class="nav-row">
+        <div class="brand">
+          <button id="mobileMenuToggle" class="mobile-menu" aria-label="Toggle menu">☰</button>
+          <span class="brand-mark">V</span>
+          <div>
+            <p class="brand-kicker">Secure records portal</p>
+            <h1>Vahan Info</h1>
+          </div>
+        </div>
+
+        <nav id="mainNav" class="nav" aria-label="Main navigation">
+          <a href="#" class="nav-link is-active" data-nav="dashboard">Dashboard</a>
+          <a href="#about" class="nav-link" data-nav="about">About</a>
+          <a href="#contact" class="nav-link" data-nav="contact">Contact</a>
+        </nav>
+
+        <div class="topbar-actions">
+          <button id="themeToggle" class="icon-button" aria-label="Toggle theme">🌙</button>
+          <div class="topbar-pill" id="sessionStatus">Guest</div>
         </div>
       </div>
-      <div class="topbar-pill" id="sessionStatus">Guest mode</div>
     </header>
 
-    <main class="hero auth-layout">
-      <section class="hero-copy">
-        <span class="eyebrow">Unified login and records</span>
-        <h2>Register once, then store your RC, license, and vehicle information in one place.</h2>
-        <p>
-          Create a secure demo account, sign in, and manage the details you want to keep handy.
-          The data is stored locally in your browser so you can view it again later.
-        </p>
-
-        <div class="stats">
-          <article>
-            <strong>Login</strong>
-            <span>Access your saved profile quickly</span>
-          </article>
-          <article>
-            <strong>Register</strong>
-            <span>Create a new account and profile</span>
-          </article>
-          <article>
-            <strong>Store</strong>
-            <span>Save RC, license, and vehicle details</span>
-          </article>
+    <main class="content-area">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-stats">
+          <div class="stat-card">
+            <div class="stat-icon">👤</div>
+            <div>
+              <div class="stat-label">Account</div>
+              <div id="accountNameSmall">-</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">📄</div>
+            <div>
+              <div class="stat-label">Records</div>
+              <div id="recordCountSmall">0</div>
+            </div>
+          </div>
         </div>
-      </section>
+      </aside>
 
-      <section class="search-panel auth-card" aria-label="Authentication panel">
-        <div class="auth-tabs">
-          <button type="button" class="auth-tab is-active" data-auth-tab="login">Login</button>
-          <button type="button" class="auth-tab" data-auth-tab="register">Register</button>
-        </div>
-
-        <form id="loginForm" class="auth-form auth-form--active">
-          <label class="field">
-            <span>Email</span>
-            <input type="email" id="loginEmail" placeholder="name@example.com" required>
-          </label>
-
-          <label class="field">
-            <span>Password</span>
-            <input type="password" id="loginPassword" placeholder="Enter your password" required>
-          </label>
-
-          <button type="submit">Sign In</button>
-        </form>
-
-        <form id="registerForm" class="auth-form">
-          <label class="field">
-            <span>Full name</span>
-            <input type="text" id="registerName" placeholder="Your full name" required>
-          </label>
-
-          <label class="field">
-            <span>Email</span>
-            <input type="email" id="registerEmail" placeholder="name@example.com" required>
-          </label>
-
-          <label class="field">
-            <span>Password</span>
-            <input type="password" id="registerPassword" placeholder="Create a password" minlength="6" required>
-          </label>
-
-          <div class="auth-grid">
-            <label class="field">
-              <span>Phone</span>
-              <input type="tel" id="registerPhone" placeholder="10 digit number" required>
-            </label>
-            <label class="field">
-              <span>City</span>
-              <input type="text" id="registerCity" placeholder="Your city" required>
-            </label>
+      <section class="main-panel">
+        <section class="auth-section auth-layout" id="authSection">
+          <div class="hero-copy">
+            <span class="eyebrow">Unified login and records</span>
+            <h2>Register once, then store your RC, license, and vehicle information.</h2>
+            <p>Create a secure account, sign in, and manage details quickly.</p>
           </div>
 
-          <button type="submit">Create Account</button>
-        </form>
+          <section class="auth-card" aria-label="Authentication panel">
+            <div class="auth-tabs" role="tablist">
+              <button type="button" class="auth-tab is-active" data-auth-tab="login" role="tab">Login</button>
+              <button type="button" class="auth-tab" data-auth-tab="register" role="tab">Register</button>
+            </div>
+
+            <form id="loginForm" class="auth-form auth-form--active" novalidate>
+              <div class="input-float">
+                <input type="email" id="loginEmail" placeholder=" " required aria-label="Email">
+                <label for="loginEmail">Email</label>
+              </div>
+
+              <div class="input-float">
+                <input type="password" id="loginPassword" placeholder=" " required aria-label="Password">
+                <label for="loginPassword">Password</label>
+                <button type="button" class="password-toggle" data-target="loginPassword" aria-label="Toggle password">👁️</button>
+              </div>
+
+              <button type="submit" class="btn primary" data-action="login">Sign In</button>
+            </form>
+
+            <form id="registerForm" class="auth-form" novalidate>
+              <div class="input-float">
+                <input type="text" id="registerName" placeholder=" " required aria-label="Full name">
+                <label for="registerName">Full name</label>
+              </div>
+
+              <div class="input-float">
+                <input type="email" id="registerEmail" placeholder=" " required aria-label="Email">
+                <label for="registerEmail">Email</label>
+              </div>
+
+              <div class="input-float">
+                <input type="password" id="registerPassword" placeholder=" " minlength="6" required aria-label="Password">
+                <label for="registerPassword">Password</label>
+                <button type="button" class="password-toggle" data-target="registerPassword" aria-label="Toggle password">👁️</button>
+              </div>
+
+              <div class="auth-grid">
+                <div class="input-float">
+                  <input type="tel" id="registerPhone" placeholder=" " required aria-label="Phone">
+                  <label for="registerPhone">Phone</label>
+                </div>
+                <div class="input-float">
+                  <input type="text" id="registerCity" placeholder=" " required aria-label="City">
+                  <label for="registerCity">City</label>
+                </div>
+              </div>
+
+              <button type="submit" class="btn primary">Create Account</button>
+            </form>
+          </section>
+        </section>
+
+        <section id="dashboard" class="dashboard" hidden>
+          <div class="dashboard-hero">
+            <div>
+              <span class="eyebrow">User dashboard</span>
+              <h3 id="dashboardTitle">Profile overview</h3>
+              <p id="dashboardSubtitle">Your saved records appear below.</p>
+            </div>
+            <div class="hero-actions">
+              <div class="search-row">
+                <input id="globalSearch" class="search-input" placeholder="Search by vehicle number, owner, or model">
+                <button id="searchButton" class="btn">Search</button>
+              </div>
+              <button type="button" id="logoutButton" class="btn ghost">Logout</button>
+            </div>
+          </div>
+
+          <div class="dashboard-grid">
+            <article class="stat-card card-accent">
+              <div class="stat-top"><div class="stat-icon">📈</div><div class="stat-label">Total</div></div>
+              <div class="stat-value" id="totalCount">0</div>
+              <div class="stat-meta">All time</div>
+            </article>
+
+            <article class="stat-card">
+              <div class="stat-top"><div class="stat-icon">🕒</div><div class="stat-label">Today</div></div>
+              <div class="stat-value" id="todayCount">0</div>
+              <div class="stat-meta">Added today</div>
+            </article>
+
+            <article class="stat-card">
+              <div class="stat-top"><div class="stat-icon">🚗</div><div class="stat-label">Cars</div></div>
+              <div class="stat-value" id="typeCount">0</div>
+              <div class="stat-meta">By vehicle type</div>
+            </article>
+          </div>
+
+          <div class="dashboard-panels">
+            <section class="panel save-panel" aria-label="Saved details form">
+              <div class="panel-header">
+                <p>Save details</p>
+                <span>Protected by your account</span>
+              </div>
+
+              <form id="detailsForm" class="details-form">
+                <div class="grid-2">
+                  <div class="input-float">
+                    <input type="text" id="rcNumber" placeholder=" " required>
+                    <label for="rcNumber">RC number</label>
+                  </div>
+                  <div class="input-float">
+                    <input type="text" id="licenseNumber" placeholder=" " required>
+                    <label for="licenseNumber">License number</label>
+                  </div>
+                </div>
+
+                <div class="grid-2">
+                  <div class="input-float">
+                    <input type="text" id="vehicleNumber" placeholder=" " required>
+                    <label for="vehicleNumber">Vehicle number</label>
+                  </div>
+                  <div class="input-float">
+                    <input type="text" id="vehicleModel" placeholder=" " required>
+                    <label for="vehicleModel">Vehicle model</label>
+                  </div>
+                </div>
+
+                <div class="grid-2">
+                  <div class="input-float">
+                    <input type="text" id="vehicleFuel" placeholder=" " required>
+                    <label for="vehicleFuel">Fuel type</label>
+                  </div>
+                  <div class="input-float">
+                    <input type="date" id="vehicleRegistrationDate" placeholder=" " required>
+                    <label for="vehicleRegistrationDate">Registration date</label>
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" class="btn primary" data-action="save">Save details</button>
+                </div>
+              </form>
+            </section>
+
+            <section class="panel records-panel" aria-live="polite">
+              <div class="panel-header">
+                <p>Saved records</p>
+                <span>Everything in one place</span>
+              </div>
+
+              <div id="result" class="table-wrap">
+                <!-- Records table inserted here -->
+              </div>
+
+              <div class="pagination-row" id="paginationRow" hidden>
+                <button class="btn" id="prevPage">Prev</button>
+                <div id="pageInfo" class="page-info">Page 1</div>
+                <button class="btn" id="nextPage">Next</button>
+              </div>
+            </section>
+          </div>
+        </section>
       </section>
     </main>
 
-    <section id="dashboard" class="dashboard" hidden>
-      <div class="dashboard-hero">
-        <div>
-          <span class="eyebrow">User dashboard</span>
-          <h3 id="dashboardTitle">Profile overview</h3>
-          <p id="dashboardSubtitle">Your saved records appear below.</p>
+    <footer class="site-footer">
+      <div class="page-shell footer-row">
+        <div>© <span id="year">2026</span> Vahan Info — <span id="version">v1.0.0</span></div>
+        <div class="footer-links"><a href="#">Privacy</a> · <a href="#">Terms</a></div>
+      </div>
+    </footer>
+
+    <!-- Toasts -->
+    <div id="toastContainer" aria-live="polite" class="toast-container"></div>
+
+    <!-- Confirm modal -->
+    <div id="confirmModal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+      <div class="modal-panel">
+        <h3 id="confirmTitle">Confirm action</h3>
+        <p id="confirmMessage">Are you sure?</p>
+        <div class="modal-actions">
+          <button id="confirmCancel" class="btn ghost">Cancel</button>
+          <button id="confirmOk" class="btn danger">Delete</button>
         </div>
-        <button type="button" id="logoutButton" class="secondary-button">Logout</button>
       </div>
-
-      <div class="dashboard-grid">
-        <article class="info-card info-card--accent">
-          <p class="info-card-label">Account</p>
-          <strong id="accountName">-</strong>
-          <span id="accountEmail">-</span>
-        </article>
-        <article class="info-card">
-          <p class="info-card-label">Contact</p>
-          <strong id="accountPhone">-</strong>
-          <span id="accountCity">-</span>
-        </article>
-        <article class="info-card">
-          <p class="info-card-label">Status</p>
-          <strong id="recordCount">0 records</strong>
-          <span>RC, license, and vehicle info</span>
-        </article>
-      </div>
-
-      <div class="dashboard-panels">
-        <section class="search-panel" aria-label="Saved details form">
-          <div class="panel-header">
-            <p>Save details</p>
-            <span>Local browser storage</span>
-          </div>
-
-          <form id="detailsForm" class="details-form">
-            <div class="auth-grid">
-              <label class="field">
-                <span>RC number</span>
-                <input type="text" id="rcNumber" placeholder="RC number" required>
-              </label>
-              <label class="field">
-                <span>License number</span>
-                <input type="text" id="licenseNumber" placeholder="License number" required>
-              </label>
-            </div>
-
-            <div class="auth-grid">
-              <label class="field">
-                <span>Vehicle number</span>
-                <input type="text" id="vehicleNumber" placeholder="Vehicle number" required>
-              </label>
-              <label class="field">
-                <span>Vehicle model</span>
-                <input type="text" id="vehicleModel" placeholder="Vehicle model" required>
-              </label>
-            </div>
-
-            <div class="auth-grid">
-              <label class="field">
-                <span>Fuel type</span>
-                <input type="text" id="vehicleFuel" placeholder="Petrol / Diesel / EV" required>
-              </label>
-              <label class="field">
-                <span>Registration date</span>
-                <input type="date" id="vehicleRegistrationDate" required>
-              </label>
-            </div>
-
-            <button type="submit">Save details</button>
-          </form>
-        </section>
-
-        <section class="result-area records-panel" aria-live="polite">
-          <div class="panel-header">
-            <p>Saved records</p>
-            <span>Everything in one place</span>
-          </div>
-          <div id="result">
-            <div class="empty-state">
-              <div class="empty-icon">•</div>
-              <h3>No records yet</h3>
-              <p>Add your RC, license, and vehicle details to populate this panel.</p>
-            </div>
-          </div>
-        </section>
-      </div>
-    </section>
+    </div>
   </div>
 
   <script src="script.js"></script>
