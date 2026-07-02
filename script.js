@@ -33,22 +33,55 @@ const vehicleFuel = document.getElementById('vehicleFuel');
 const vehicleRegistrationDate = document.getElementById('vehicleRegistrationDate');
 
 let currentUser = null;
+let currentToken = null;
 
-const SESSION_KEY = 'vahan-current-user';
+const SESSION_KEY = 'vahan-session';
 
-function getCurrentUserData() {
+function getStoredSession() {
   const stored = localStorage.getItem(SESSION_KEY);
-  return stored ? JSON.parse(stored) : null;
+  if (!stored) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(stored);
+  } catch (error) {
+    return null;
+  }
 }
 
-function setCurrentUserData(user) {
-  if (user) {
-    localStorage.setItem(SESSION_KEY, JSON.stringify(user));
-    currentUser = user;
+function setCurrentSession(session) {
+  if (session?.user && session?.token) {
+    localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    currentUser = session.user;
+    currentToken = session.token;
   } else {
     localStorage.removeItem(SESSION_KEY);
     currentUser = null;
+    currentToken = null;
   }
+}
+
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>'"]/g, (character) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }[character]));
+}
+
+async function apiFetch(url, options = {}) {
+  const headers = new Headers(options.headers || {});
+  if (currentToken) {
+    headers.set('Authorization', `Bearer ${currentToken}`);
+  }
+
+  return fetch(url, {
+    ...options,
+    headers
+  });
 }
 
 function formatDate(dateString) {
@@ -87,12 +120,17 @@ function renderEmptyState() {
 }
 
 function renderError(message) {
-  resultDiv.innerHTML = `<div class="error-card">${message}</div>`;
+  resultDiv.innerHTML = `<div class="error-card">${escapeHtml(message)}</div>`;
 }
 
 async function loadUserRecords(userId) {
   try {
-    const response = await fetch(`/api/records/${userId}`);
+    const response = await apiFetch(`/api/records/${userId}`);
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({}));
+      throw new Error(error.error || 'Failed to load records.');
+    }
+
     const data = await response.json();
     return data.records || [];
   } catch (error) {
@@ -114,33 +152,33 @@ function renderRecordList(records) {
           (record, index) => `
             <article class="record-item">
               <div class="record-item-header">
-                <strong>${record.vehicleNumber}</strong>
+                <strong>${escapeHtml(record.vehicleNumber)}</strong>
                 <span>Record ${index + 1}</span>
               </div>
               <div class="record-fields">
                 <div class="record-field">
                   <label>RC number</label>
-                  <span>${record.rcNumber}</span>
+                  <span>${escapeHtml(record.rcNumber)}</span>
                 </div>
                 <div class="record-field">
                   <label>License number</label>
-                  <span>${record.licenseNumber}</span>
+                  <span>${escapeHtml(record.licenseNumber)}</span>
                 </div>
                 <div class="record-field">
                   <label>Vehicle model</label>
-                  <span>${record.vehicleModel}</span>
+                  <span>${escapeHtml(record.vehicleModel)}</span>
                 </div>
                 <div class="record-field">
                   <label>Fuel type</label>
-                  <span>${record.vehicleFuel}</span>
+                  <span>${escapeHtml(record.vehicleFuel)}</span>
                 </div>
                 <div class="record-field">
                   <label>Registration date</label>
-                  <span>${formatDate(record.vehicleRegistrationDate)}</span>
+                  <span>${escapeHtml(formatDate(record.vehicleRegistrationDate))}</span>
                 </div>
                 <div class="record-field">
                   <label>Saved on</label>
-                  <span>${formatDate(record.createdAt)}</span>
+                  <span>${escapeHtml(formatDate(record.createdAt))}</span>
                 </div>
               </div>
               <div class="record-actions">
@@ -157,10 +195,15 @@ function renderRecordList(records) {
     button.addEventListener('click', async () => {
       const recordId = button.dataset.removeRecord;
       try {
-        await fetch(`/api/records/${recordId}`, { method: 'DELETE' });
+        const response = await apiFetch(`/api/records/${recordId}`, { method: 'DELETE' });
+        if (!response.ok) {
+          const error = await response.json().catch(() => ({}));
+          throw new Error(error.error || 'Failed to delete record.');
+        }
+
         refreshDashboard();
       } catch (error) {
-        renderError('Failed to delete record.');
+        renderError(error.message || 'Failed to delete record.');
       }
     });
   });
@@ -212,7 +255,7 @@ loginForm.addEventListener('submit', async (e) => {
     }
 
     const data = await response.json();
-    setCurrentUserData(data.user);
+    setCurrentSession({ user: data.user, token: data.token });
     loginForm.reset();
     setAuthTab('login');
     refreshDashboard();
@@ -244,7 +287,7 @@ registerForm.addEventListener('submit', async (e) => {
     }
 
     const data = await response.json();
-    setCurrentUserData(data.user);
+    setCurrentSession({ user: data.user, token: data.token });
     registerForm.reset();
     setAuthTab('login');
     refreshDashboard();
@@ -269,11 +312,10 @@ detailsForm.addEventListener('submit', async (e) => {
   const vehRegDate = vehicleRegistrationDate.value;
 
   try {
-    const response = await fetch('/api/records/save', {
+    const response = await apiFetch('/api/records/save', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        userId: currentUser.id,
         rcNumber: rcNum,
         licenseNumber: licNum,
         vehicleNumber: vehNum,
@@ -292,16 +334,42 @@ detailsForm.addEventListener('submit', async (e) => {
     detailsForm.reset();
     refreshDashboard();
   } catch (error) {
-    renderError('Failed to save record.');
+    renderError(error.message || 'Failed to save record.');
   }
 });
 
 logoutButton.addEventListener('click', () => {
-  setCurrentUserData(null);
+  setCurrentSession(null);
   setAuthTab('login');
   refreshDashboard();
 });
 
-currentUser = getCurrentUserData();
-setAuthTab('login');
-refreshDashboard();
+async function restoreSession() {
+  const storedSession = getStoredSession();
+  if (!storedSession?.token || !storedSession?.user) {
+    setCurrentSession(null);
+    setAuthTab('login');
+    await refreshDashboard();
+    return;
+  }
+
+  currentToken = storedSession.token;
+  currentUser = storedSession.user;
+
+  try {
+    const response = await apiFetch('/api/auth/me');
+    if (!response.ok) {
+      throw new Error('Session expired');
+    }
+
+    const data = await response.json();
+    setCurrentSession({ user: data.user, token: storedSession.token });
+  } catch (error) {
+    setCurrentSession(null);
+  }
+
+  setAuthTab('login');
+  await refreshDashboard();
+}
+
+restoreSession();

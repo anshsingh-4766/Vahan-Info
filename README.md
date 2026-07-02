@@ -1,18 +1,18 @@
 🚗 Vahan Information Portal
 
-A simple and user-friendly web application that allows users to fetch vehicle details by entering a vehicle registration number. This project is built using HTML, CSS, and JavaScript and focuses on practicing frontend fundamentals and form handling.
+A secure vehicle information portal with browser-based login, registration, and saved record management backed by Express and SQLite.
 
 📌 Features
 
-🔍 Search vehicle details using registration number
+🔐 JWT authentication for login, registration, and session restore
 
-🎯 Clean and minimal user interface
+🛡️ Passwords stored with bcrypt hashing
 
-📱 Fully responsive design
+🔎 Save, list, and delete vehicle records per authenticated user
 
-⚡ Fast and lightweight frontend application
+🚦 Helmet, CORS, and rate limiting enabled on the API
 
-🧩 Beginner-friendly project structure
+📱 Responsive single-page frontend
 
 🛠️ Tech Stack
 
@@ -20,4 +20,24 @@ HTML – Structure of the application
 
 CSS – Styling and layout
 
-JavaScript – Form handling and logic
+JavaScript – Form handling and API integration
+
+Node.js + Express – API server
+
+SQLite + better-sqlite3 – Local persistence
+
+🔧 Environment Variables
+
+Create a `.env` file from `.env.example` and set:
+
+- `PORT`
+- `JWT_SECRET`
+- `CORS_ORIGIN`
+- `DATABASE_FILE`
+
+▶️ Run
+
+```bash
+npm install
+npm start
+```
